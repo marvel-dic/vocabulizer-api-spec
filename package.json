@@ -1,0 +1,17 @@
+{
+  "name": "vocabulizer-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "aglio -i api.apib -s",
+    "build": "aglio -i api.apib --theme-template triple -o build/index.html",
+    "deploy": ""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aglio": "^2.3.0"
+  }
+}
