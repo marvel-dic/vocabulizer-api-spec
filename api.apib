@@ -1,75 +1,16 @@
 FORMAT: 1A
 
-# JSON Schema
-Every request and response can have a schema. Below you will find examples
-using [JSON Schema](http://json-schema.org/) to describe the format of request
-and response body content.
+# Dictionary [/get-dictionary-from-src]
 
-## API Blueprint
-+ [Previous: Named Endpoints](13.%20Named%20Endpoints.md)
-+ [This: Raw API Blueprint](https://raw.github.com/apiaryio/api-blueprint/master/examples/14.%20JSON%20Schema.md)
-+ [Next: Advanced JSON Schema](15.%20Advanced%20JSON%20Schema.md)
-
-# Notes [/notes/{id}]
-
-+ Parameters
-
-    + id: abc123 (required) - Unique identifier for a note
-
-## Get a note [GET]
-Gets a single note by its unique identifier.
-
-+ Response 200 (application/json)
-
-    + Body
-
-            {
-                "id": "abc123",
-                "title": "This is a note",
-                "content": "This is the note content."
-                "tags": [
-                    "todo",
-                    "home"
-                ]
-            }
-
-    + Schema
-
-            {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "string"
-                    },
-                    "title": {
-                        "type": "string"
-                    },
-                    "content": {
-                        "type": "string"
-                    },
-                    "tags": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-
-## Update a note [PATCH]
-Modify a note's data using its unique identifier. You can edit the `title`,
-`content`, and `tags`.
+## Get a dictionary from src [GET]
+Process text and return dictionary.
 
 + Request (application/json)
 
     + Body
 
             {
-                "title": "This is another note",
-                "tags": [
-                    "todo",
-                    "work"
-                ]
+                "src": "Hello world"
             }
 
     + Schema
@@ -77,20 +18,79 @@ Modify a note's data using its unique identifier. You can edit the `title`,
             {
                 "type": "object",
                 "properties": {
-                    "title": {
-                        "type": "string"
-                    },
-                    "content": {
-                        "type": "string"
-                    },
-                    "tags": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    }
+                    "src": { "type": "string" }
                 },
                 "additionalProperties": false
             }
 
-+ Response 204
+
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "data": {
+                    "src": "Hello world!",
+                    "dictionary": [
+                        {
+                            "dictionaryWord": "hello",
+                            "partOfSpeechTag": "INTJ",
+                            "entriesInSrc": [{ "start": 0, "end": 5 }]
+                        },
+                        {
+                            "dictionaryWord": "world",
+                            "partOfSpeechTag": "NOUN",
+                            "entriesInSrc": [{ "start": 6, "end": 11 }]
+                        }
+                    ]
+                },
+                "error": null,
+                "meta": { "languages": ["en"] }
+            }
+
+    + Schema
+
+            {
+                "type": "object",
+                "required": ["data", "error", "meta"],
+                "properties": {
+                    "data": {
+                        "type": "object",
+                        "required": ["src", "dictionary"],
+                        "properties": {
+                            "src": { "type": "string" },
+                            "dictionary": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "required": ["dictionaryWord", "partOfSpeechTag", "entriesInSrc"],
+                                    "properties": {
+                                        "dictionaryWord": { "type": "string" },
+                                        "partOfSpeechTag": { "type": "string" },
+                                        "entriesInSrc": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "required": ["start", "end"],
+                                                "properties": {
+                                                    "start": { "type": "integer" },
+                                                    "end": { "type": "integer" }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "error": { "type": "null" },
+                    "meta": {
+                        "type": "object",
+                        "required": ["languages"],
+                        "properties": {
+                            "languages": { "type": "array", "items": { "type": "string" } }
+                        }
+                    }
+                }
+            }
