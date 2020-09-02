@@ -1,8 +1,66 @@
 FORMAT: 1A
 
-# Dictionary [/get-dictionary-from-src]
+# User [/user]
 
-## Get a dictionary from src [POST]
+## User Dictionary [/user/{user-id}/dictionary]
+
+### Get user's dictionary [GET]
+
++ Response 200 (application/json)
+    + Body
+            {
+                data: {
+                    words: [
+                        {
+                            "dictionaryWord": "hello",
+                            "partOfSpeechTag": "INTJ",
+                            "languages": ["en"]
+                        },
+                    ]
+                }
+                "error": null,
+                "meta": {}
+            }
+
+## Updates [PUT /user/{user-id}/dictionary]
+
++ Request (application/json)
+    + Body
+
+            {
+                words: [
+                        {
+                            "dictionaryWord": "hello",
+                            "partOfSpeechTag": "INTJ",
+                            "languages": ["en"]
+                        },
+                    ]
+            }
+            
++ Response 200 (application/json)
+    + Body
+            {
+                data: {
+                    words: [
+                        {
+                            "dictionaryWord": "hello",
+                            "partOfSpeechTag": "INTJ",
+                            "languages": ["en"]
+                        },
+                    ]
+                }
+                "error": null,
+                "meta": {
+                    "entries": [{
+                        "word": "hello"
+                        "entries": [{ "start": 6, "end": 11 }]
+                    }] 
+                }
+            }
+
+# Dictionary [/dictionary]
+
+## Get a dictionary from src [POST /dictionary/from-src]
 Process text and return dictionary.
 
 + Request (application/json)
@@ -28,69 +86,21 @@ Process text and return dictionary.
 + Response 200 (application/json)
 
     + Body
-
             {
-                "data": {
-                    "src": "Hello world!",
-                    "dictionary": [
+                data: {
+                    words: [
                         {
                             "dictionaryWord": "hello",
                             "partOfSpeechTag": "INTJ",
-                            "entriesInSrc": [{ "start": 0, "end": 5 }]
+                            "languages": ["en"]
                         },
-                        {
-                            "dictionaryWord": "world",
-                            "partOfSpeechTag": "NOUN",
-                            "entriesInSrc": [{ "start": 6, "end": 11 }]
-                        }
                     ]
-                },
+                }
                 "error": null,
-                "meta": { "languages": ["en"] }
-            }
-
-    + Schema
-
-            {
-                "type": "object",
-                "required": ["data", "error", "meta"],
-                "properties": {
-                    "data": {
-                        "type": "object",
-                        "required": ["src", "dictionary"],
-                        "properties": {
-                            "src": { "type": "string" },
-                            "dictionary": {
-                                "type": "array",
-                                "items": {
-                                    "type": "object",
-                                    "required": ["dictionaryWord", "partOfSpeechTag", "entriesInSrc"],
-                                    "properties": {
-                                        "dictionaryWord": { "type": "string" },
-                                        "partOfSpeechTag": { "type": "string" },
-                                        "entriesInSrc": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "required": ["start", "end"],
-                                                "properties": {
-                                                    "start": { "type": "integer" },
-                                                    "end": { "type": "integer" }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "error": { "type": "null" },
-                    "meta": {
-                        "type": "object",
-                        "required": ["languages"],
-                        "properties": {
-                            "languages": { "type": "array", "items": { "type": "string" } }
-                        }
-                    }
+                "meta": {
+                    "entries": [{
+                        "word": "hello"
+                        "entries": [{ "start": 6, "end": 11 }]
+                    }] 
                 }
             }
